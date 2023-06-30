@@ -31,7 +31,7 @@ export class User {
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'fk_project_id' })
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   fk_project_id: Project;
 
 }
