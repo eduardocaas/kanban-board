@@ -20,15 +20,15 @@ export class UserController {
     } 
     catch (error) {
       console.error(error);
-
       let statusCode = 500;
-      let errorMessage = "Error saving User!";
+      let errorMessage = "Error saving User";
       let timestamp = new Date().toISOString();
 
       if (error instanceof BadRequestException) {
         statusCode = 400;
         errorMessage = error.message;
-      } else if (error instanceof ConflictException) {
+      } 
+      else if (error instanceof ConflictException) {
         statusCode = 409;
         errorMessage = error.message;
       }
