@@ -1,8 +1,8 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './project.entity';
 import { ProjectRepository } from './project.repository';
-import { FindOneOptions } from 'typeorm';
+import { Equal, FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class ProjectService {
@@ -10,7 +10,6 @@ export class ProjectService {
   constructor(@InjectRepository(Project) private readonly projectRepository: ProjectRepository) {}
 
   async save(project: Project): Promise<Project> {
-
     if(!project.title || project.title.trim().length === 0) {
       throw new BadRequestException('Project title must not be blank');
     }
@@ -26,5 +25,10 @@ export class ProjectService {
     }
 
     return this.projectRepository.save(project);
+  }
+
+  async findById(id: number): Promise<Project> {
+    const options: FindOneOptions = { where: { id: id } };
+    return this.projectRepository.findOne(options);
   }
 }

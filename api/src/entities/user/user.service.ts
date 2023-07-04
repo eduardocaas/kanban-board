@@ -9,7 +9,6 @@ export class UserService {
   constructor(@InjectRepository(User) private readonly userRepository: UserRepository) {}
 
   async save(user: User): Promise<User> {
-
     if (!user.name || user.name.trim().length === 0) {
       throw new BadRequestException('User name must not be blank');
     }
@@ -42,5 +41,10 @@ export class UserService {
     }
 
     return this.userRepository.save(user);
+  }
+
+  async findById(id: number): Promise<User> {
+    const options: FindOneOptions = { where: { id: id } };
+    return this.userRepository.findOne(options);
   }
 }
