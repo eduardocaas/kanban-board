@@ -7,21 +7,21 @@ import { User } from '../user/user.entity';
 export class Task {
 
   @PrimaryGeneratedColumn({ type: 'int' })
-  id: Number;
+  id: number;
 
   @Column({ 
     type: 'varchar', 
     length: 100, 
     nullable: false 
   })
-  title: String;
+  title: string;
 
   @Column({ 
     type: 'varchar',
     length: 255,
     nullable: true
   })
-  description: String;
+  description: string;
 
   @Column({
     type: 'varchar',
@@ -29,16 +29,16 @@ export class Task {
     default: StatusTaskEnum.BACKLOG,
     nullable: false
   })
-  status: Number;
+  status: number;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'fk_project_id' })
   @Column({ nullable: false })
-  fk_project_id: Project;
+  fk_project_id: number;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'fk_user_id' })
   @Column({ nullable: false })
-  fk_user_id: User;
+  fk_user_id: number;
 
 }
