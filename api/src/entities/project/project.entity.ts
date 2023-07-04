@@ -5,7 +5,7 @@ import { User } from '../user/user.entity';
 export class Project {
 
   @PrimaryGeneratedColumn({ type: 'int' })
-  id: Number;
+  id: number;
 
   @Column({ 
     type: 'varchar', 
@@ -13,6 +13,6 @@ export class Project {
     unique: true,
     nullable: false 
   })
-  title: String;
+  title: string;
 
 }

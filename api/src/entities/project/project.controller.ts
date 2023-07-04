@@ -21,7 +21,7 @@ export class ProjectController {
     catch (error) {
       console.log(error);
       let statusCode = 500;
-      let errorMessage = "Error saving Project";
+      let errorMessage = "Server error saving project";
       let timestamp = new Date().toISOString();
 
       if (error instanceof BadRequestException) {

@@ -21,7 +21,7 @@ export class UserController {
     catch (error) {
       console.error(error);
       let statusCode = 500;
-      let errorMessage = "Error saving User";
+      let errorMessage = "Server error saving user";
       let timestamp = new Date().toISOString();
 
       if (error instanceof BadRequestException) {

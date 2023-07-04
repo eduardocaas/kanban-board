@@ -5,14 +5,14 @@ import { Project } from '../project/project.entity';
 export class User {
 
   @PrimaryGeneratedColumn({ type: 'int' })
-  id: Number;
+  id: number;
 
   @Column({ 
     type: 'varchar', 
     length: 100,
     nullable: false 
   })
-  name: String;
+  name: string;
 
   @Column({
     type: 'varchar',
@@ -20,18 +20,18 @@ export class User {
     unique: true,
     nullable: false
   })
-  username: String;
+  username: string;
 
   @Column({
     type: 'varchar',
     length: 50,
     nullable: false
   })
-  password: String;
+  password: string;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'fk_project_id' })
   @Column({ nullable: true })
-  fk_project_id: Project;
+  fk_project_id: number;
 
 }
