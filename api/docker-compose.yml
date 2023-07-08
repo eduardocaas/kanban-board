@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: nestjs-container
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/kanban_board
+    networks:
+      - docker-network
+    depends_on:
+      - db
+    command: npm run start:dev
+  
+  db:
+    image: mysql
+    container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: 'kanban_db'
+      MYSQL_USER: 'kanban_user'
+      MYSQL_PASSWORD: 'kanban_pass'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - ./db/data:/var/lib/mysql
+    networks:
+      - docker-network
+    ports:
+      - "3306:3306"
+
+volumes:
+  db:
+networks:
+  docker-network:
