@@ -47,7 +47,7 @@ export class TaskService {
 
     const obj = await this.taskRepository.update(task.id, task);
     if (!obj) {
-      throw new InternalServerErrorException("Error saving task");
+      throw new InternalServerErrorException("Server error updating task");
     } 
     
     return this.findById(task.id);
