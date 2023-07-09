@@ -29,7 +29,7 @@ export class Task {
     default: StatusTaskEnum.BACKLOG,
     nullable: false
   })
-  status: number;
+  status: string;
 
   @ManyToOne(() => Project)
   @JoinColumn({ name: 'fk_project_id' })
