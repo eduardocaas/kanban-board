@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ConflictException, Controller, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Get, Post, Res } from '@nestjs/common';
 import { Project } from './project.entity';
 import e, { Response } from 'express';
 import { ProjectService } from './project.service';
@@ -19,7 +19,7 @@ export class ProjectController {
       res.sendStatus(201);
     } 
     catch (error) {
-      console.log(error);
+      console.error(error);
       let statusCode = 500;
       let errorMessage = "Server error saving project";
       let timestamp = new Date().toISOString();
@@ -34,6 +34,19 @@ export class ProjectController {
       }
       
       res.status(statusCode).send({ message: errorMessage, timestamp });
+    }
+  }
+
+  @Get()
+  async getAll(@Res() res: Response): Promise<void> {
+    try {
+      const projects: Project[] = await this.projectService.findAll();
+      res.status(200).send(projects);
+    }
+    catch (error) {
+      console.error(error);
+      let timestamp = new Date().toISOString();
+      res.status(500).send({ message: "Server error getting projects", timestamp });
     }
   }
 }

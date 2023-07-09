@@ -31,4 +31,8 @@ export class ProjectService {
     const options: FindOneOptions = { where: { id: id } };
     return this.projectRepository.findOne(options);
   }
+
+  async findAll(): Promise<Project[]> {
+    return this.projectRepository.find();
+  }
 }
