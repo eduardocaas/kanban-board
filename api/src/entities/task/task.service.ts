@@ -16,7 +16,7 @@ export class TaskService {
 
   async save(task: Task): Promise<Task> {
     this.validateTask(task);
-    this.validateTitle(task);
+    await this.validateTitle(task);
 
     const options: FindOneOptions = { where: { title: task.title } };
     const obj = await this.taskRepository.findOne(options);
@@ -38,12 +38,17 @@ export class TaskService {
   }
 
   async update(task: Task): Promise<Task> {
-    if (!this.findById(task.id)) {
+    const findTask = await this.findById(task.id);
+    if(!findTask) {
       throw new NotFoundException(`Task with id: ${task.id} not found`);
     }
 
+    if (findTask.title != task.title) {
+      this.validateTitle(task);
+    }
+
+    this.validateStatus(task)
     this.validateTask(task);
-    this.validateTitle(task);
 
     const obj = await this.taskRepository.update(task.id, task);
     if (!obj) {
@@ -53,16 +58,16 @@ export class TaskService {
     return this.findById(task.id);
   }
 
-  async validateTitle(task: Task): Promise<void> {
+  private async validateTitle(task: Task): Promise<void> {
     const options: FindOneOptions = { where: { title: task.title } };
     const obj = await this.taskRepository.findOne(options);
-    if (obj) {
+    if (obj && obj.id !== task.id) {
       throw new ConflictException('Title is already in use');
-    }
+    } 
   }
 
-  async findById(id: number): Promise<Task> {
-    const obj = await this.taskRepository.findOne({ where: { id: id } });
+  private findById(id: number): Promise<Task> {
+    const obj = this.taskRepository.findOne({ where: { id: id } });
     if(!obj) {
       throw new NotFoundException(`Task with id: ${id} not found`);
     }
@@ -92,6 +97,12 @@ export class TaskService {
 
     if (!task.fk_user_id) {
       throw new BadRequestException('User must not be null');
+    }
+  }
+
+  private validateStatus(task: Task): void {
+    if (!['BACKLOG', 'DOING', 'DONE'].includes(task.status)) {
+      throw new BadRequestException("Invalid status! Choose one of them: 'BACKLOG', 'DOING', 'DONE'");
     }
   }
 }
