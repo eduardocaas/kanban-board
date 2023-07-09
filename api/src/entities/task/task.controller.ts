@@ -6,7 +6,7 @@ import { Response } from 'express';
 @Controller('task')
 export class TaskController {
 
-  constructor(private readonly taskService: TaskService) {}
+  constructor(private readonly taskService: TaskService) { }
 
   private readonly uri = "http://localhost:3000/task";
 
@@ -19,6 +19,7 @@ export class TaskController {
       res.sendStatus(201);
     }
     catch (error) {
+      console.error(error);
       let statusCode = 500;
       let errorMessage = 'Server error saving task';
       let timestamp = new Date().toISOString();
@@ -45,25 +46,27 @@ export class TaskController {
     try {
       const obj = await this.taskService.update(task);
       res.status(200).send(obj);
-    } 
+    }
     catch (error) {
+      console.error(error);
       let statusCode = 500;
       let errorMessage = 'Server error updating task';
       let timestamp = new Date().toISOString();
-
-      if (!(error instanceof InternalServerErrorException)) {
-        if (error instanceof BadRequestException) {
-          statusCode = 400;
-        } 
-        else if (error instanceof ConflictException) {
-          statusCode = 409;
-        }
-        else if (error instanceof NotFoundException) {
-          statusCode = 404;
-        } 
-        else if (error instanceof InternalServerErrorException) {
-          statusCode = 500;
-        }
+      
+      if (error instanceof BadRequestException) {
+        statusCode = 400;
+        errorMessage = error.message;
+      }
+      else if (error instanceof ConflictException) {
+        statusCode = 409;
+        errorMessage = error.message;
+      }
+      else if (error instanceof NotFoundException) {
+        statusCode = 404;
+        errorMessage = error.message;
+      }
+      else if (error instanceof InternalServerErrorException) {
+        statusCode = 500;
         errorMessage = error.message;
       }
 
