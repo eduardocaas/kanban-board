@@ -1,8 +1,9 @@
-<div>
+<div class="box">
+  <h2>Projects</h2>
   <div *ngFor="let project of projects">
-    <div class="card">
-      <p>ID: {{project.id}}</p>
-      <p>Name: {{project.title}}</p>
+    <div class="card mat-elevation-z4">
+      <p>{{project.title}}</p>
+      <button mat-raised-button routerLink="../kanban/{{project.id}}">Board</button>
     </div>
   </div>
 </div>
