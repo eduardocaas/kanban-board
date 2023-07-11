@@ -1,1 +1,67 @@
-<p>kanban works!</p>
+<div class="flex">
+  <div class="boxInput">
+    <h2>Create Task</h2>
+      <div class="cardInput mat-elevation-z4">
+        <mat-form-field>
+          <mat-label>Title</mat-label>
+          <input [(ngModel)]="task.title" matInput #input1 maxlength="100" required>
+          <mat-hint align="end">{{input1.value.length}}/100</mat-hint>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea [(ngModel)]="task.description" matInput #input2 maxlength="255" required></textarea>
+          <mat-hint align="end">{{input2.value.length}}/255</mat-hint>
+        </mat-form-field>
+        <button mat-raised-button (click)="save()">Save</button>
+      </div>
+
+  </div>
+  <div class="box">
+    <h2>Backlog</h2>
+    <div *ngFor="let task of tasksBacklog">
+      <div class="card mat-elevation-z4">
+        <button mat-icon-button class="icon btn" (click)="delete(task.id)" aria-label="icon-button with trash icon">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button class="icon btn" (click)="update(task.id, 2)" aria-label="icon-button with arrow icon">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        <p class="title">{{task.title}}</p>
+        <p class="desc">{{task.description}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <h2>Doing</h2>
+    <div *ngFor="let task of tasksDoing">
+      <div class="card mat-elevation-z4">
+        <button mat-icon-button class="icon btn" (click)="delete(task.id)" aria-label="icon-button with trash icon">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button class="icon btn" (click)="update(task.id, 1)" aria-label="icon-button with arrow icon">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-icon-button class="icon btn" (click)="update(task.id, 3)" aria-label="icon-button with arrow icon">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        <p class="title">{{task.title}}</p>
+        <p class="desc">{{task.description}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <h2>Done</h2>
+    <div *ngFor="let task of tasksDone">
+      <div class="card mat-elevation-z4">
+        <button mat-icon-button class="icon btn" (click)="delete(task.id)" aria-label="icon-button with trash icon">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button class="icon btn" (click)="update(task.id, 2)" aria-label="icon-button with arrow icon">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <p class="title">{{task.title}}</p>
+        <p class="desc">{{task.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>
