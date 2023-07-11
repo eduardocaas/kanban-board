@@ -4,7 +4,7 @@ import { Task } from './task.entity';
 import { TaskRepository } from './task.repository';
 import { ProjectService } from '../project/project.service';
 import { UserService } from '../user/user.service';
-import { FindOneOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class TaskService {
@@ -39,7 +39,7 @@ export class TaskService {
 
   async update(task: Task): Promise<Task> {
     const findTask = await this.findById(task.id);
-    if(!findTask) {
+    if (!findTask) {
       throw new NotFoundException(`Task with id: ${task.id} not found`);
     }
 
@@ -58,20 +58,44 @@ export class TaskService {
     return this.findById(task.id);
   }
 
-  private async validateTitle(task: Task): Promise<void> {
-    const options: FindOneOptions = { where: { title: task.title } };
-    const obj = await this.taskRepository.findOne(options);
-    if (obj && obj.id !== task.id) {
-      throw new ConflictException('Title is already in use');
-    } 
-  }
-
   private findById(id: number): Promise<Task> {
     const obj = this.taskRepository.findOne({ where: { id: id } });
     if(!obj) {
       throw new NotFoundException(`Task with id: ${id} not found`);
     }
     return obj;
+  }
+
+  async getById(id: number): Promise<Task> {
+    const obj = this.taskRepository.findOne({ where: { id: id } });
+    if(!obj) {
+      throw new NotFoundException(`Task with id: ${id} not found`);
+    }
+    return obj;
+  }
+
+  async findByProjectId(id: number): Promise<Task[]> {
+    const options: FindManyOptions = {
+      where: { fk_project_id: id }
+    }
+    return this.taskRepository.find(options);
+  }
+
+  async delete(id: number): Promise<void> {
+    const findTask = await this.findById(id);
+    if (!findTask) {
+      throw new NotFoundException(`Task with id: ${id} not found`);
+    }
+    this.taskRepository.delete(findTask);
+  }
+
+
+  private async validateTitle(task: Task): Promise<void> {
+    const options: FindOneOptions = { where: { title: task.title } };
+    const obj = await this.taskRepository.findOne(options);
+    if (obj && obj.id !== task.id) {
+      throw new ConflictException('Title is already in use');
+    } 
   }
 
   private validateTask(task: Task): void {
