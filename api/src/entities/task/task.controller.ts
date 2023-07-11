@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, BadRequestException, NotFoundException, ConflictException, Put, InternalServerErrorException } from '@nestjs/common';
+import { Body, Controller, Post, Res, Param, Get, BadRequestException, NotFoundException, ConflictException, Put, InternalServerErrorException, Delete } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { Task } from './task.entity';
 import { Response } from 'express';
@@ -9,6 +9,33 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) { }
 
   private readonly uri = "http://localhost:3000/task";
+
+  @Get('/:id')
+  async getByProjectId(@Param("id") id: number, @Res() res: Response): Promise<void> {
+    try {
+      const tasks: Task[] = await this.taskService.findByProjectId(id);
+      res.status(200).send(tasks);
+    } 
+    catch (error) {
+      console.error(error);
+      let timestamp = new Date().toISOString();
+      res.status(500).send({ message: "Server error getting Tasks with Project ID", timestamp});
+    }
+  }
+
+  @Get('/get/:id')
+  async getById(@Param("id") id: number, @Res() res: Response): Promise<void> {
+    try {
+      const task = await this.taskService.getById(id);
+      res.status(200).send(task);
+    } 
+    catch (error) {
+      console.error(error);
+      let timestamp = new Date().toISOString();
+      res.status(500).send({ message: "Server error getting Task with ID", timestamp});
+    }
+  }
+
 
   @Post()
   async save(@Body() task: Task, @Res() res: Response): Promise<void> {
@@ -67,6 +94,27 @@ export class TaskController {
       }
       else if (error instanceof InternalServerErrorException) {
         statusCode = 500;
+        errorMessage = error.message;
+      }
+
+      res.status(statusCode).send({ message: errorMessage, timestamp });
+    }
+  }
+
+  @Delete("/:id")
+  async delete(@Param('id') id: number, @Res() res: Response): Promise<void> {
+    try {
+      await this.taskService.delete(id);
+      res.status(204).send();
+    }
+    catch (error) {
+      console.error(error);
+      let statusCode = 500;
+      let errorMessage = 'Server error deleting task';
+      let timestamp = new Date().toISOString();
+
+      if (error instanceof NotFoundException) {
+        statusCode = 404;
         errorMessage = error.message;
       }
 
