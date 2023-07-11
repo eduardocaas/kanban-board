@@ -13,5 +13,3 @@ COPY package-lock.json .
 COPY . .
 
 RUN npm install --quiet --no-optional --no-fund --loglevel=error
-
-EXPOSE 3000
