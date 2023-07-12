@@ -43,7 +43,7 @@ export class TaskController {
       const obj = await this.taskService.save(task);
       const local = `${this.uri}/${obj.id}`;
       res.location(local);
-      res.sendStatus(201);
+      res.status(201).send({ message: 'Created' });
     }
     catch (error) {
       console.error(error);

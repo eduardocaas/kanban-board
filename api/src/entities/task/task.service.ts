@@ -16,11 +16,10 @@ export class TaskService {
 
   async save(task: Task): Promise<Task> {
     this.validateTask(task);
-    await this.validateTitle(task);
 
     const options: FindOneOptions = { where: { title: task.title } };
     const obj = await this.taskRepository.findOne(options);
-    if (obj) {
+    if (obj && obj.id !== task.id && obj.fk_project_id === task.fk_project_id) {
       throw new ConflictException('Title is already in use');
     }
     
