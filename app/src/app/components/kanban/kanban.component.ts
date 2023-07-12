@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Task } from 'src/app/model/task.model';
 import { TaskService } from 'src/app/service/task.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-kanban',
@@ -20,7 +21,7 @@ export class KanbanComponent {
     fk_user_id: 1
   }
 
-  constructor(private service: TaskService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private service: TaskService, private route: ActivatedRoute, private router: Router, private toastr: ToastrService) {}
 
   tasksBacklog: Task[] = [];
   tasksDoing: Task[] = [];
@@ -54,14 +55,28 @@ export class KanbanComponent {
   }
 
   save(): void {
-    this.service.save(this.task).subscribe(response => {
-      this.reloadData();
-    });
+    this.task.status = 'BACKLOG';
+    this.service.save(this.task).subscribe(
+      {
+        next: () => {
+          this.toastr.success('Task ' + this.task.title.toUpperCase() + ' created with success!', 'Registry', { timeOut: 3000 });
+          this.reloadData();
+        },
+        error: (err) => {
+          if (err.error.errors) {
+            err.error.errors.forEach((e: { message: string }) => {
+              this.toastr.error(e.message, 'Error', { timeOut: 6000 });
+            });
+          }
+          else {
+            this.toastr.error(err.error.message, 'Error', { timeOut: 6000 });
+          }
+        }
+      }
+    );
   }
 
   update(id: any, status: number): void {
-
-
       this.service.findById(id).subscribe(response => {
         this.task.id = response.id;
         this.task.title = response.title;
@@ -90,6 +105,11 @@ export class KanbanComponent {
     this.service.delete(id).subscribe(response => {
       this.reloadData();
     });
+  }
+
+  clear(): void {
+    this.task.title = '';
+    this.task.description = '';
   }
 
 }
