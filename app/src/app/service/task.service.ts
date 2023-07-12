@@ -11,7 +11,7 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  save(task: Task): Observable<Task> {
+  save(task: Task): Observable<any> {
     return this.http.post<Task>(`${API_CONFIG.baseUrl}/task`, task);
   }
 
@@ -27,8 +27,8 @@ export class TaskService {
     return this.http.put<Task>(`${API_CONFIG.baseUrl}/task`, task);
   }
 
-  delete(id: number): Observable<Task> {
-    return this.http.delete<Task>(`${API_CONFIG.baseUrl}/task/${id}`);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_CONFIG.baseUrl}/task/${id}`);
   }
 
 }
