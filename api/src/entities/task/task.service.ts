@@ -19,7 +19,8 @@ export class TaskService {
 
     const options: FindOneOptions = { where: { title: task.title } };
     const obj = await this.taskRepository.findOne(options);
-    if (obj && obj.id !== task.id && obj.fk_project_id === task.fk_project_id) {
+    
+    if (obj /*&& (obj.fk_project_id == task.fk_project_id)*/) {
       throw new ConflictException('Title is already in use');
     }
     
@@ -66,7 +67,7 @@ export class TaskService {
   }
 
   async getById(id: number): Promise<Task> {
-    const obj = this.taskRepository.findOne({ where: { id: id } });
+    const obj = await this.taskRepository.findOne({ where: { id: id } });
     if(!obj) {
       throw new NotFoundException(`Task with id: ${id} not found`);
     }
