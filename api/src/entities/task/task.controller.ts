@@ -31,8 +31,16 @@ export class TaskController {
     } 
     catch (error) {
       console.error(error);
+      let statusCode = 500;
+      let errorMessage = 'Server error getting Task with ID'
       let timestamp = new Date().toISOString();
-      res.status(500).send({ message: "Server error getting Task with ID", timestamp});
+      
+      if (error instanceof NotFoundException) {
+        statusCode = 404;
+        errorMessage = error.message;
+      }
+
+      res.status(statusCode).send({ message: errorMessage, timestamp });
     }
   }
 
