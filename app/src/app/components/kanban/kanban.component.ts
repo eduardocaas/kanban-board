@@ -56,10 +56,11 @@ export class KanbanComponent {
 
   save(): void {
     this.task.status = 'BACKLOG';
+    console.log(this.task);
     this.service.save(this.task).subscribe(
       {
         next: () => {
-          this.toastr.success('Task ' + this.task.title.toUpperCase() + ' created with success!', 'Registry', { timeOut: 3000 });
+          this.toastr.success('Task ' + this.task.title.toUpperCase() + ' created with success', 'Registry', { timeOut: 3000 });
           this.reloadData();
         },
         error: (err) => {
@@ -96,13 +97,15 @@ export class KanbanComponent {
         this.task.fk_user_id = response.fk_user_id;
 
         this.service.update(this.task).subscribe(response => {
+          this.clear();
           this.reloadData();
         });
       });
   }
 
-  delete(id: any): void {
+  delete(id: any, title: string): void {
     this.service.delete(id).subscribe(response => {
+      this.toastr.success(`Task ${title.toUpperCase()} removed with success`, 'Removal', { timeOut: 3000 });
       this.reloadData();
     });
   }
