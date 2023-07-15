@@ -1,3 +1,11 @@
 .spacer {
   flex: 1 1 auto;
 }
+
+body {
+  background-color: rgb(20, 20, 20);
+}
+
+mat-toolbar {
+  background-color: #2c3b8f;
+}

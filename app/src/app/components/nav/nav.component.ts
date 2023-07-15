@@ -11,7 +11,7 @@ export class NavComponent {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.router.navigate(['dashboard']);
+    this.router.navigate(['kanban/1']);
   }
 
 }
