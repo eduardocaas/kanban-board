@@ -35,4 +35,12 @@ export class ProjectService {
   async findAll(): Promise<Project[]> {
     return this.projectRepository.find();
   }
+
+  async delete(id: number): Promise<void> {
+    const findProject = await this.findById(id);
+    if (!findProject) {
+      throw new NotFoundException(`Project with id: ${id} not found`);
+    }
+    this.projectRepository.delete(findProject);
+  }
 }

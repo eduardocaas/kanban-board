@@ -1,4 +1,4 @@
-import { BadRequestException, Body, ConflictException, Controller, Get, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, ConflictException, Controller, Delete, Get, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { Project } from './project.entity';
 import e, { Response } from 'express';
 import { ProjectService } from './project.service';
@@ -16,7 +16,7 @@ export class ProjectController {
       const obj = await this.projectService.save(project);
       const local = `${this.uri}/${obj.id}`;
       res.location(local);
-      res.sendStatus(201);
+      res.status(201).send({ message: 'Created' });
     } 
     catch (error) {
       console.error(error);
@@ -47,6 +47,27 @@ export class ProjectController {
       console.error(error);
       let timestamp = new Date().toISOString();
       res.status(500).send({ message: "Server error getting projects", timestamp });
+    }
+  }
+
+  @Delete('/:id')
+  async delete(@Param('id') id: number, @Res() res: Response): Promise<void> {
+    try {
+      await this.projectService.delete(id);
+      res.status(204).send();
+    }
+    catch (error) {
+      console.error(error);
+      let statusCode = 500;
+      let errorMessage = 'Server error deleting project';
+      let timestamp = new Date().toISOString();
+
+      if (error instanceof NotFoundException) {
+        statusCode = 404;
+        errorMessage = error.message;
+      }
+
+      res.status(statusCode).send({ message: errorMessage, timestamp });
     }
   }
 }
