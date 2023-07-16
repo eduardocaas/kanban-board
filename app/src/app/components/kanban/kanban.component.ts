@@ -62,6 +62,7 @@ export class KanbanComponent {
         next: () => {
           this.toastr.success('Task ' + this.task.title.toUpperCase() + ' created with success', 'Registry', { timeOut: 3000 });
           this.reloadData();
+          this.clear();
         },
         error: (err) => {
           if (err.error.errors) {
@@ -111,8 +112,12 @@ export class KanbanComponent {
   }
 
   clear(): void {
+    this.task.id = null;
     this.task.title = '';
     this.task.description = '';
+    this.task.status = 'BACKLOG';
+    this.task.fk_project_id = this.id;
+    this.task.fk_user_id = 1;
   }
 
 }
