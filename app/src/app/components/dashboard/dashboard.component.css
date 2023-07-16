@@ -1,21 +1,100 @@
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.flex {
+  display: flex;
+  width: 50vw;
+  height: 70vh;
+}
+
 .box {
   background-color: rgb(36, 36, 36);
-  width: 300px;
-  height: 90vh;
-  padding-top: 10px;
-  margin: 10px 0 0 10px;
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 10px;
+  overflow: auto;
 }
 
 h2 {
+  width: 100%;
+  height: 40px;
+  background-color: rgb(68, 68, 68);
   color: white;
-  padding: 10px 0 0 30px;
+  padding: 10px 0 0 0;
+  text-align: center;
+  font-weight: 300;
+  text-transform: uppercase;
 }
 
 .card {
-  color: white;
-  background-color: #3f51b5;
+  background-color: rgb(12, 12, 12);
   font-size: medium;
   width: 200px;
   padding: 20px;
-  margin: 0 0 20px 30px;
+  margin: 0 auto 10px auto;
+}
+
+p {
+  color: rgb(201, 201, 201);
+}
+
+.boxInput {
+  background-color: rgb(36, 36, 36);
+  width: 100%;
+  height: 100%;
+}
+
+.cardInput {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: rgb(12, 12, 12);
+  font-size: medium;
+  width: 220px;
+  padding: 40px;
+  margin: 0 auto;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.btn {
+  color: rgb(172, 172, 172);
+  margin-top: -15px;
+}
+
+.btnInput {
+  width: 108px;
+}
+
+.flexProject {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+mat-hint {
+  color: rgb(104, 104, 104);
+}
+
+::-webkit-scrollbar {
+  width: 10px
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(36, 36, 36);
+  border-radius: 0px
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(12, 12, 12);
+  border-radius: 0px
 }
